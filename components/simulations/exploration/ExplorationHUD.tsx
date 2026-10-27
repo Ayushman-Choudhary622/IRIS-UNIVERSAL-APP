@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { motion, AnimatePresence } from 'motion/react';
 import { Crosshair, X, Globe, Mountain, Cpu, Telescope, Target, Maximize, Activity, ArrowLeft } from 'lucide-react';
 import { useIrisInput } from '@/lib/input/IrisInputContext';
@@ -32,27 +33,28 @@ export function ExplorationHUD({ activeZone, setActiveZone, selectedPOI, setSele
     <div className="flex h-full w-full flex-col justify-between p-6 pointer-events-none">
       {/* Top Bar */}
       <div className="flex w-full justify-between items-start pointer-events-auto">
-        <div className="flex items-start gap-4">
-          <Link
+        <div className="flex items-center gap-4">
+          <IrisBackButton
             href="/simulations"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-white/90 text-slate-800 border border-slate-200 shadow-sm hover:bg-white transition-all h-fit"
-          >
-            <ArrowLeft size={18} className="text-sky-600" />
-            <span>EXIT SIMULATION</span>
-          </Link>
+            label="EXIT SIMULATION"
+            subtitle="Return to Simulations"
+            accentColor="#06b6d4"
+            showHomeShortcut={true}
+            position="static"
+          />
 
-          <div className="bg-white/90 backdrop-blur-md p-4 rounded-xl flex items-center space-x-4 border border-slate-200 shadow-sm border-l-4 border-l-sky-500">
-            <div className="p-2.5 bg-sky-50 rounded-xl">
+          <div className="bg-slate-900/90 backdrop-blur-md p-3.5 px-5 rounded-2xl flex items-center space-x-4 border border-sky-500/30 shadow-[0_0_20px_rgba(6,182,212,0.25)] border-l-4 border-l-sky-400">
+            <div className="p-2.5 bg-sky-500/15 rounded-xl text-sky-400">
               {(() => {
                 const Icon = ZONE_INFO[activeZone].icon;
-                return <Icon size={24} className="text-sky-600" />;
+                return <Icon size={22} className="text-sky-400" />;
               })()}
             </div>
             <div>
-              <h1 className="text-lg font-extrabold uppercase tracking-wide text-slate-900">
+              <h1 className="text-base font-extrabold uppercase tracking-wide text-white">
                 {ZONE_INFO[activeZone].title}
               </h1>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-slate-400 font-medium">
                 {ZONE_INFO[activeZone].desc}
               </p>
             </div>

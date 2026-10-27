@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { ChevronLeft, Volume2, VolumeX, SkipBack, SkipForward, Music, Wifi } from 'lucide-react';
 import { useIrisSettings } from '@/lib/settings/IrisSettingsContext';
 import { playClickSound } from '@/lib/audio/soundEffects';
@@ -239,35 +240,7 @@ export default function MusicPage() {
       >
         {/* Left: BACK TO ENTERTAINMENT */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', justifySelf: 'start' }}>
-          <Link
-            href="/entertainment"
-            onClick={() => {
-              if (interfaceSounds) playClickSound((volume / 100) * 0.35);
-            }}
-            title="Return to Entertainment Menu"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              backgroundColor: 'rgba(15, 23, 42, 0.95)',
-              border: '2px solid #c084fc',
-              borderRadius: '16px',
-              padding: '10px 24px',
-              color: '#ffffff',
-              fontSize: '15px',
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              boxShadow: '0 0 24px rgba(192, 132, 252, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(12px)',
-              cursor: 'pointer',
-              transition: 'all 0.18s ease',
-            }}
-          >
-            <ChevronLeft size={22} strokeWidth={2.6} style={{ color: '#c084fc' }} />
-            <span>BACK TO ENTERTAINMENT</span>
-          </Link>
+          <IrisBackButton href="/entertainment" label="BACK TO ENTERTAINMENT" accentColor="#c084fc" showHomeShortcut={true} position="static" />
 
           <span
             style={{

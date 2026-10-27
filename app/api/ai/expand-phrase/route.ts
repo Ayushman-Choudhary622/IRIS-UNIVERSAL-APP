@@ -4,9 +4,8 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 // Priority order for Gemini models with active quota
 const CANDIDATE_MODELS = [
-  'gemini-3.5-flash-lite',
-  'gemini-3.5-flash',
   'gemini-2.5-flash',
+  'gemini-1.5-flash',
 ];
 
 export async function POST(req: Request) {
@@ -27,7 +26,7 @@ export async function POST(req: Request) {
 
     const trimmedKeywords = keywords.trim();
 
-    // 1. Attempt generation with Gemini models if API key is provided
+    // 1. Attempt generation with Gemini models if API key is configured
     if (GEMINI_API_KEY) {
       for (const model of CANDIDATE_MODELS) {
       try {

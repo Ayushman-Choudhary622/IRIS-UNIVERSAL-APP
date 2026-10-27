@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { Home, Gamepad2, Plane, Headphones, BookOpen, Wifi } from 'lucide-react';
 import { useIrisSettings } from '@/lib/settings/IrisSettingsContext';
 import { playClickSound } from '@/lib/audio/soundEffects';
@@ -107,33 +108,7 @@ export default function EntertainmentHub() {
       >
         {/* Left: BACK TO HOME */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', justifySelf: 'start' }}>
-          <Link
-            href="/"
-            onClick={handleClick}
-            title="Return to IRIS Home Dashboard"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              backgroundColor: 'rgba(15, 23, 42, 0.95)',
-              border: '2px solid #38bdf8',
-              borderRadius: '16px',
-              padding: '10px 24px',
-              color: '#ffffff',
-              fontSize: '15px',
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              boxShadow: '0 0 24px rgba(56, 189, 248, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(12px)',
-              cursor: 'pointer',
-              transition: 'all 0.18s ease',
-            }}
-          >
-            <Home size={22} strokeWidth={2.4} style={{ color: '#38bdf8' }} />
-            <span>BACK TO HOME</span>
-          </Link>
+          <IrisBackButton href="/" label="BACK TO HOME" position="static" />
 
           <span
             style={{

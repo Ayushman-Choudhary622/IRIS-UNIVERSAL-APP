@@ -22,7 +22,6 @@ interface FlightCanvasProps {
   onRecenterRef?: (fn: () => void) => void;
   onExit?: () => void;
   onTelemetry?: (t: FlightTelemetry) => void;
-  showAirEffects?: boolean;
 }
 
 export default function FlightCanvas({
@@ -30,16 +29,10 @@ export default function FlightCanvas({
   onRecenterRef,
   onExit,
   onTelemetry,
-  showAirEffects = true,
 }: FlightCanvasProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  const showAirEffectsRef = useRef(showAirEffects);
-  useEffect(() => {
-    showAirEffectsRef.current = showAirEffects;
-  }, [showAirEffects]);
 
   const { pitch = 0, yaw = 0, roll = 0 } = useIrisInput();
   const { invertX = false, invertY = false } = useIrisSettings();
@@ -224,7 +217,6 @@ export default function FlightCanvas({
       });
 
       const streakLines = new THREE.LineSegments(streakGeo, streakMat);
-      streakLines.visible = showAirEffectsRef.current;
       scene.add(streakLines);
 
       // 3. Floating Cloud Wisps (Soft Atmospheric Puffs)
@@ -256,7 +248,6 @@ export default function FlightCanvas({
       });
 
       const puffPoints = new THREE.Points(puffGeo, puffMat);
-      puffPoints.visible = showAirEffectsRef.current;
       scene.add(puffPoints);
 
       // Window Resize
@@ -331,61 +322,55 @@ export default function FlightCanvas({
         flightVsRef.current = vs;
         flightAltRef.current = Math.max(900, flightAltRef.current + (vs / 60) * delta);
 
-        // 5. Cockpit Airframe Micro-Vibration & Particle Visibility
-        const isAirActive = showAirEffectsRef.current;
-        streakLines.visible = isAirActive;
-        puffPoints.visible = isAirActive;
-
-        const vibIntensity = isAirActive ? (flightSpeedRef.current / 270) * 0.08 : 0;
-        const vibX = isAirActive ? Math.sin(time * 0.024) * vibIntensity : 0;
-        const vibY = isAirActive ? Math.cos(time * 0.02) * (vibIntensity * 0.7) : 0;
+        // 5. Cockpit Airframe Micro-Vibration (aerodynamic turbulence at speed)
+        const vibIntensity = (flightSpeedRef.current / 270) * 0.08;
+        const vibX = Math.sin(time * 0.024) * vibIntensity;
+        const vibY = Math.cos(time * 0.02) * (vibIntensity * 0.7);
 
         // =====================================================================
-        // ANIMATE AIRFLOW STREAKS & MOVING WIND (If Air Effects Enabled)
+        // ANIMATE AIRFLOW STREAKS & MOVING WIND
         // =====================================================================
-        if (isAirActive) {
-          const posAttr = streakGeo.attributes.position as THREE.BufferAttribute;
-          const posArr = posAttr.array as Float32Array;
+        const posAttr = streakGeo.attributes.position as THREE.BufferAttribute;
+        const posArr = posAttr.array as Float32Array;
 
-          for (let i = 0; i < STREAK_COUNT; i++) {
-            const s = streakData[i];
-            s.z += s.speed * currentSpeedMultiplier * delta;
+        for (let i = 0; i < STREAK_COUNT; i++) {
+          const s = streakData[i];
+          s.z += s.speed * currentSpeedMultiplier * delta;
 
-            // When wind streak passes windshield, loop back in front
-            if (s.z > 12) {
-              s.z = -320 - Math.random() * 40;
-              s.x = (Math.random() - 0.5) * 110;
-              s.y = (Math.random() - 0.25) * 75;
-            }
-
-            const idx = i * 6;
-            posArr[idx] = s.x;
-            posArr[idx + 1] = s.y;
-            posArr[idx + 2] = s.z;
-
-            posArr[idx + 3] = s.x;
-            posArr[idx + 4] = s.y;
-            posArr[idx + 5] = s.z + s.len * Math.max(1, currentSpeedMultiplier * 1.35);
+          // When wind streak passes windshield, loop back in front
+          if (s.z > 12) {
+            s.z = -320 - Math.random() * 40;
+            s.x = (Math.random() - 0.5) * 110;
+            s.y = (Math.random() - 0.25) * 75;
           }
-          posAttr.needsUpdate = true;
 
-          // Animate Cloud Wisps
-          const puffAttr = puffGeo.attributes.position as THREE.BufferAttribute;
-          const puffArr = puffAttr.array as Float32Array;
-          for (let i = 0; i < PUFF_COUNT; i++) {
-            const p = puffData[i];
-            p.z += p.speed * currentSpeedMultiplier * delta;
-            if (p.z > 20) {
-              p.z = -380;
-              p.x = (Math.random() - 0.5) * 180;
-              p.y = (Math.random() - 0.35) * 110;
-            }
-            puffArr[i * 3] = p.x;
-            puffArr[i * 3 + 1] = p.y;
-            puffArr[i * 3 + 2] = p.z;
-          }
-          puffAttr.needsUpdate = true;
+          const idx = i * 6;
+          posArr[idx] = s.x;
+          posArr[idx + 1] = s.y;
+          posArr[idx + 2] = s.z;
+
+          posArr[idx + 3] = s.x;
+          posArr[idx + 4] = s.y;
+          posArr[idx + 5] = s.z + s.len * Math.max(1, currentSpeedMultiplier * 1.35);
         }
+        posAttr.needsUpdate = true;
+
+        // Animate Cloud Wisps
+        const puffAttr = puffGeo.attributes.position as THREE.BufferAttribute;
+        const puffArr = puffAttr.array as Float32Array;
+        for (let i = 0; i < PUFF_COUNT; i++) {
+          const p = puffData[i];
+          p.z += p.speed * currentSpeedMultiplier * delta;
+          if (p.z > 20) {
+            p.z = -380;
+            p.x = (Math.random() - 0.5) * 180;
+            p.y = (Math.random() - 0.35) * 110;
+          }
+          puffArr[i * 3] = p.x;
+          puffArr[i * 3 + 1] = p.y;
+          puffArr[i * 3 + 2] = p.z;
+        }
+        puffAttr.needsUpdate = true;
 
         // Head tracking input
         const inp = inputRef.current;

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import FixedBackButton from '@/components/FixedBackButton';
+import IrisBackButton from '@/components/IrisBackButton';
 import {
   ChevronLeft,
   Wifi,
@@ -98,7 +98,7 @@ export default function HealthMonitoringPage() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 'clamp(10px, 1.8vh, 18px) clamp(16px, 2.5vw, 36px)',
+        padding: 'clamp(12px, 2.2vh, 26px) clamp(16px, 3.5vw, 48px)',
         boxSizing: 'border-box',
         overflow: 'hidden',
         userSelect: 'none',
@@ -108,25 +108,25 @@ export default function HealthMonitoringPage() {
       {/* 1. TOP STATUS BAR */}
       <div
         style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          justifyContent: 'space-between',
           width: '100%',
-          maxWidth: '1360px',
-          margin: '0 auto',
           padding: '2px 4px',
           zIndex: 20,
         }}
       >
         {/* Left: Clock and Back Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', justifySelf: 'start' }}>
+          <IrisBackButton href="/" label="BACK TO HOME" position="static" />
           <span
             style={{
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '16px',
-              fontWeight: 700,
-              color: '#e2e8f0',
-              letterSpacing: '0.02em',
+              fontSize: '18px',
+              fontWeight: 800,
+              color: '#ffffff',
+              letterSpacing: '0.04em',
+              textShadow: '0 0 12px rgba(56, 189, 248, 0.5)',
             }}
           >
             {timeStr}
@@ -142,6 +142,8 @@ export default function HealthMonitoringPage() {
             color: '#ffffff',
             textTransform: 'uppercase',
             margin: 0,
+            justifySelf: 'center',
+            textAlign: 'center',
             background: 'linear-gradient(90deg, #ffffff, #38bdf8)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -151,7 +153,7 @@ export default function HealthMonitoringPage() {
         </h1>
 
         {/* Right Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#94a3b8' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#94a3b8', justifySelf: 'end' }}>
           <div
             style={{
               display: 'flex',
@@ -522,8 +524,6 @@ export default function HealthMonitoringPage() {
         </div>
       </div>
 
-      {/* STANDARDIZED UNIFIED FIXED BACK BUTTON */}
-      <FixedBackButton href="/" label="BACK TO HOME" />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { Plane, Compass, Sparkles, ArrowRight, ArrowLeft, ChevronLeft } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 
@@ -13,39 +14,16 @@ const SimulationPreview = dynamic(
 
 export default function SimulationsPage() {
   return (
-    <div className="h-[calc(100vh-var(--header-height))] bg-[var(--iris-bg)] px-8 py-6 flex flex-col justify-between overflow-hidden">
+    <div className="h-[calc(100vh-var(--header-height))] bg-[var(--iris-bg)] px-8 py-6 pt-24 flex flex-col justify-between overflow-hidden">
       {/* Upper-Left Standard BACK TO ENTERTAINMENT Button */}
-      <Link
+      <IrisBackButton
         href="/entertainment"
-        title="Return to Entertainment Menu"
-        style={{
-          position: 'fixed',
-          top: 'clamp(12px, 2.2vh, 26px)',
-          left: 'clamp(16px, 3.5vw, 48px)',
-          zIndex: 9999,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '10px',
-          backgroundColor: 'rgba(15, 23, 42, 0.95)',
-          border: '2px solid #06b6d4',
-          borderRadius: '16px',
-          padding: '10px 24px',
-          color: '#ffffff',
-          fontSize: '15px',
-          fontWeight: 800,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          textDecoration: 'none',
-          boxShadow: '0 0 24px rgba(6, 182, 212, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(12px)',
-          cursor: 'pointer',
-          outline: 'none',
-          transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-      >
-        <ChevronLeft size={22} strokeWidth={2.6} style={{ color: '#06b6d4' }} />
-        <span>BACK TO ENTERTAINMENT</span>
-      </Link>
+        label="BACK TO ENTERTAINMENT"
+        subtitle="Return to Entertainment Menu"
+        accentColor="#06b6d4"
+        showHomeShortcut={true}
+        position="fixed"
+      />
 
       <div>
         <PageHeader 

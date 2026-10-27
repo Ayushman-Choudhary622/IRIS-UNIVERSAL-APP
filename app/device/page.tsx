@@ -91,7 +91,7 @@ export default function DevicePage() {
   }, [yaw, pitch, blink, testModalOpen, targetPos, invertX, invertY, interfaceSounds, volume]);
 
   return (
-    <div className="page-container flex flex-col gap-5 p-6 overflow-y-auto">
+    <div className="page-container flex flex-col gap-5 p-6 pt-24 overflow-y-auto">
       <PageHeader
         title="DEVICE"
         subtitle="Hardware Diagnostics, Calibration & Real-Time Telemetry"
@@ -107,9 +107,9 @@ export default function DevicePage() {
       {/* Top Row: Module status cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { name: 'ESP32 BLE CORE', online: displayConnected, desc: 'v4.2 HID' },
-          { name: 'MPU6050 SENSOR A', online: displayConnected, desc: 'Pitch & Yaw' },
-          { name: 'MPU6050 SENSOR B', online: displayConnected, desc: 'Roll & Fusion' },
+          { name: 'ESP32 BLE CORE', online: displayConnected, desc: 'Seeed Studio XIAO / COM3' },
+          { name: 'MPU6050 SENSOR A', online: displayConnected, desc: 'Pitch & Yaw Fusion' },
+          { name: 'MPU6050 SENSOR B', online: displayConnected, desc: 'Roll & Gyro Banking' },
           { name: 'BLINK CV SENSOR', online: displayConnected, desc: '60 FPS Eye Tracker' }
         ].map(module => (
           <GlassCard key={module.name} className="p-4 flex flex-col justify-between">
@@ -133,7 +133,7 @@ export default function DevicePage() {
         <GlassCard className="p-6 flex flex-col gap-6">
           <h2 className="text-lg font-bold border-b border-[var(--iris-border)] pb-2 flex justify-between items-center">
             <span>Hardware & Connection</span>
-            <span className="text-xs font-mono text-[var(--iris-cyan)]">PORT: BLE HID</span>
+            <span className="text-xs font-mono text-[var(--iris-cyan)]">PORT: BLE HID · 60 HZ</span>
           </h2>
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
@@ -144,9 +144,16 @@ export default function DevicePage() {
             </div>
 
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2 text-[var(--iris-text-secondary)]"><Bluetooth size={18}/> Bluetooth HID</div>
-              <span className={displayConnected ? 'text-[var(--iris-blue)] font-bold font-mono' : 'text-[var(--iris-danger)] font-bold font-mono'}>
-                {displayConnected ? 'PAIRED & STREAMING' : 'DISCONNECTED'}
+              <div className="flex items-center gap-2 text-[var(--iris-text-secondary)]"><Bluetooth size={18} className="text-cyan-400" /> System Bluetooth</div>
+              <span className="text-[var(--iris-blue)] font-bold font-mono text-xs">
+                Realtek Wireless Bluetooth Adapter
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2 text-[var(--iris-text-secondary)]"><Bluetooth size={18} className="text-emerald-400" /> BLE Peripheral Core</div>
+              <span className="text-[var(--iris-green)] font-bold font-mono text-xs">
+                ESP32 BLE HID (COM3 · STREAMING)
               </span>
             </div>
 

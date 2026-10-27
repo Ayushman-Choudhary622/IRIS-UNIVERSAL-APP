@@ -23,12 +23,7 @@ export default function FlightSimulationPage() {
     rollDeg: 0,
     gForce: 1.0,
   });
-  const [showAirEffects, setShowAirEffects] = useState(true);
   const recenterRef = useRef<() => void>(() => {});
-
-  const handleToggleAirEffects = useCallback(() => {
-    setShowAirEffects((prev) => !prev);
-  }, []);
 
   const handleRecenterRegistration = useCallback((fn: () => void) => {
     recenterRef.current = fn;
@@ -61,7 +56,6 @@ export default function FlightSimulationPage() {
         onRecenterRef={handleRecenterRegistration}
         onExit={handleExit}
         onTelemetry={setTelemetry}
-        showAirEffects={showAirEffects}
       />
 
       <FlightHUD
@@ -70,8 +64,6 @@ export default function FlightSimulationPage() {
         onRecenter={handleRecenter}
         onExit={handleExit}
         telemetry={telemetry}
-        showAirEffects={showAirEffects}
-        onToggleAirEffects={handleToggleAirEffects}
       />
     </div>
   );

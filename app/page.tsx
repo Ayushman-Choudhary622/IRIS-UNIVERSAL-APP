@@ -36,13 +36,6 @@ export default function HomeScreen() {
     pinnedHomeTiles = [],
   } = useIrisSettings();
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const activePinnedTiles = mounted ? (pinnedHomeTiles || []) : [];
-
   // Real-time live clock (format hh:mm AM/PM or HH:mm)
   useEffect(() => {
     const updateClock = () => {
@@ -411,7 +404,7 @@ export default function HomeScreen() {
           </Link>
 
           {/* Optional Tile on Left: Entertainment (if selected in Settings) */}
-          {activePinnedTiles.includes('entertainment') && (
+          {pinnedHomeTiles.includes('entertainment') && (
             <Link
               href="/entertainment"
               onClick={() => {
@@ -469,7 +462,7 @@ export default function HomeScreen() {
           )}
 
           {/* Optional Tile on Left: Smart Room IoT (if selected and Left has fewer optional tiles) */}
-          {activePinnedTiles.includes('iot') && (!activePinnedTiles.includes('entertainment') || activePinnedTiles.includes('health')) && (
+          {pinnedHomeTiles.includes('iot') && (!pinnedHomeTiles.includes('entertainment') || pinnedHomeTiles.includes('health')) && (
             <Link
               href="/settings"
               onClick={() => {
@@ -688,7 +681,7 @@ export default function HomeScreen() {
           </button>
 
           {/* Optional Tile on Right: Health Monitoring (if selected in Settings) */}
-          {activePinnedTiles.includes('health') && (
+          {pinnedHomeTiles.includes('health') && (
             <Link
               href="/health"
               onClick={() => {
@@ -744,7 +737,7 @@ export default function HomeScreen() {
           )}
 
           {/* Optional Tile on Right: Smart Room IoT (if selected and Right has fewer optional tiles) */}
-          {activePinnedTiles.includes('iot') && activePinnedTiles.includes('entertainment') && !activePinnedTiles.includes('health') && (
+          {pinnedHomeTiles.includes('iot') && pinnedHomeTiles.includes('entertainment') && !pinnedHomeTiles.includes('health') && (
             <Link
               href="/settings"
               onClick={() => {

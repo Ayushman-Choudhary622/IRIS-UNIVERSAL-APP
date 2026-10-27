@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { Compass, Sparkles, ChevronLeft } from 'lucide-react';
 import { useIrisInput } from '@/lib/input/IrisInputContext';
 import { useIrisSettings } from '@/lib/settings/IrisSettingsContext';
@@ -321,53 +322,15 @@ export default function FlappyGame() {
         fontFamily: "'Inter', sans-serif",
       }}
     >
-      {/* Upper-Left Standard BACK TO GAMING Button */}
-      <Link
-        href="/games?tab=GAMING"
-        onClick={() => {
-          if (interfaceSounds) playClickSound((volume / 100) * 0.4);
-        }}
-        title="Return to Gaming Menu"
-        style={{
-          position: 'fixed',
-          top: 'clamp(12px, 2.2vh, 26px)',
-          left: 'clamp(16px, 3.5vw, 48px)',
-          zIndex: 9999,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '10px',
-          backgroundColor: 'rgba(15, 23, 42, 0.95)',
-          border: '2px solid #c084fc',
-          borderRadius: '16px',
-          padding: '10px 24px',
-          color: '#ffffff',
-          fontSize: '15px',
-          fontWeight: 800,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          textDecoration: 'none',
-          boxShadow: '0 0 24px rgba(192, 132, 252, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(12px)',
-          cursor: 'pointer',
-          outline: 'none',
-          transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(147, 51, 234, 0.3)';
-          e.currentTarget.style.borderColor = '#e9d5ff';
-          e.currentTarget.style.boxShadow = '0 0 32px rgba(192, 132, 252, 0.7), 0 6px 20px rgba(0, 0, 0, 0.7)';
-          e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(15, 23, 42, 0.95)';
-          e.currentTarget.style.borderColor = '#c084fc';
-          e.currentTarget.style.boxShadow = '0 0 24px rgba(192, 132, 252, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)';
-          e.currentTarget.style.transform = 'none';
-        }}
-      >
-        <ChevronLeft size={22} strokeWidth={2.6} style={{ color: '#c084fc' }} />
-        <span>BACK TO GAMING</span>
-      </Link>
+      {/* Upper-Left Standard BACK TO GAMES Button */}
+      <IrisBackButton
+        href="/games"
+        label="BACK TO GAMES"
+        subtitle="Return to Games Menu"
+        accentColor="#06b6d4"
+        showHomeShortcut={true}
+        position="fixed"
+      />
 
       {/* Top Navigation */}
       <div

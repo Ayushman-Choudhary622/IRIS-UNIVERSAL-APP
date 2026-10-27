@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
+import IrisBackButton from '@/components/IrisBackButton';
 import { useIrisInput } from '@/lib/input/IrisInputContext';
 import {
   ChevronLeft,
@@ -11,7 +12,6 @@ import {
   Plane,
   Maximize2,
   Minimize2,
-  Wind,
 } from 'lucide-react';
 import { CameraPreset, FlightTelemetry } from './FlightCanvas';
 
@@ -21,8 +21,6 @@ interface FlightHUDProps {
   onRecenter: () => void;
   onExit?: () => void;
   telemetry?: FlightTelemetry;
-  showAirEffects?: boolean;
-  onToggleAirEffects?: () => void;
 }
 
 export default function FlightHUD({
@@ -30,8 +28,6 @@ export default function FlightHUD({
   onSelectPreset,
   onRecenter,
   onExit,
-  showAirEffects = true,
-  onToggleAirEffects,
   telemetry = {
     airspeed: 270,
     altitude: 15400,
@@ -175,41 +171,15 @@ export default function FlightHUD({
       {/* ===================================================================== */}
       {/* 1. UPPER-LEFT STANDARD BACK TO ENTERTAINMENT BUTTON                  */}
       {/* ===================================================================== */}
-      <Link
+      <IrisBackButton
         href="/entertainment"
-        onClick={(e) => {
-          if (onExit) onExit();
-        }}
-        title="Return to Entertainment Menu"
-        style={{
-          position: 'fixed',
-          top: 'clamp(12px, 2.2vh, 26px)',
-          left: 'clamp(16px, 3.5vw, 48px)',
-          zIndex: 9999,
-          pointerEvents: 'auto',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '10px',
-          backgroundColor: 'rgba(15, 23, 42, 0.95)',
-          border: '2px solid #06b6d4',
-          borderRadius: '16px',
-          padding: '10px 24px',
-          color: '#ffffff',
-          fontSize: '15px',
-          fontWeight: 800,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          textDecoration: 'none',
-          boxShadow: '0 0 24px rgba(6, 182, 212, 0.45), 0 4px 14px rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(12px)',
-          cursor: 'pointer',
-          outline: 'none',
-          transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-      >
-        <ChevronLeft size={22} strokeWidth={2.6} style={{ color: '#06b6d4' }} />
-        <span>BACK TO ENTERTAINMENT</span>
-      </Link>
+        label="EXIT SIMULATION"
+        subtitle="Return to Previous Screen"
+        accentColor="#06b6d4"
+        showHomeShortcut={true}
+        position="fixed"
+        onClick={onExit}
+      />
 
       {/* ===================================================================== */}
       {/* 2. TOP BAR: FLIGHT TELEMETRY TAPE & FULLSCREEN TOGGLE                 */}
@@ -225,71 +195,38 @@ export default function FlightHUD({
           paddingLeft: 'clamp(280px, 26vw, 360px)', // Leave room for back button
         }}
       >
-        {/* Left Controls: Sound Toggle & Air Effects Toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Sound Toggle */}
-          <button
-            onClick={toggleCockpitAudio}
-            title="Toggle Cockpit Engine Sound"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              backgroundColor: isPlayingAudio ? 'rgba(6, 78, 59, 0.9)' : 'rgba(15, 23, 42, 0.92)',
-              border: isPlayingAudio ? '1.5px solid #10b981' : '1.5px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '14px',
-              padding: '9px 16px',
-              color: '#ffffff',
-              fontSize: '12px',
-              fontWeight: 800,
-              cursor: 'pointer',
-              boxShadow: isPlayingAudio ? '0 0 16px rgba(16, 185, 129, 0.4)' : 'none',
-              backdropFilter: 'blur(12px)',
-            }}
-          >
-            {isPlayingAudio ? (
-              <>
-                <Volume2 size={16} color="#34d399" />
-                <span>ENGINE: ON</span>
-              </>
-            ) : (
-              <>
-                <VolumeX size={16} color="#94a3b8" />
-                <span>SOUND: OFF</span>
-              </>
-            )}
-          </button>
-
-          {/* Button to Disable/Enable Air Like Things (Airflow Streaks, Clouds & Turbulence) */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onToggleAirEffects) onToggleAirEffects();
-            }}
-            title={showAirEffects ? 'Click to Disable Airflow, Wind Streaks & Clouds' : 'Click to Enable Airflow & Cloud Particles'}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              backgroundColor: showAirEffects ? 'rgba(8, 47, 73, 0.92)' : 'rgba(30, 41, 59, 0.92)',
-              border: showAirEffects ? '1.5px solid #38bdf8' : '1.5px solid rgba(248, 113, 113, 0.6)',
-              borderRadius: '14px',
-              padding: '9px 16px',
-              color: '#ffffff',
-              fontSize: '12px',
-              fontWeight: 800,
-              cursor: 'pointer',
-              boxShadow: showAirEffects ? '0 0 16px rgba(56, 189, 248, 0.45)' : 'none',
-              backdropFilter: 'blur(12px)',
-              transition: 'all 0.18s ease',
-            }}
-          >
-            <Wind size={16} color={showAirEffects ? '#38bdf8' : '#f87171'} />
-            <span style={{ letterSpacing: '0.04em' }}>
-              {showAirEffects ? 'AIRFLOW: ON' : 'AIR: DISABLED'}
-            </span>
-          </button>
-        </div>
+        {/* Sound Toggle */}
+        <button
+          onClick={toggleCockpitAudio}
+          title="Toggle Cockpit Engine Sound"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            backgroundColor: isPlayingAudio ? 'rgba(6, 78, 59, 0.9)' : 'rgba(15, 23, 42, 0.92)',
+            border: isPlayingAudio ? '1.5px solid #10b981' : '1.5px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '14px',
+            padding: '9px 16px',
+            color: '#ffffff',
+            fontSize: '12px',
+            fontWeight: 800,
+            cursor: 'pointer',
+            boxShadow: isPlayingAudio ? '0 0 16px rgba(16, 185, 129, 0.4)' : 'none',
+            backdropFilter: 'blur(12px)',
+          }}
+        >
+          {isPlayingAudio ? (
+            <>
+              <Volume2 size={16} color="#34d399" />
+              <span>ENGINE: ON</span>
+            </>
+          ) : (
+            <>
+              <VolumeX size={16} color="#94a3b8" />
+              <span>SOUND: OFF</span>
+            </>
+          )}
+        </button>
 
         {/* Center: Live Flight Telemetry HUD Strip */}
         <div
@@ -449,7 +386,7 @@ export default function FlightHUD({
               border: '1px solid rgba(56, 189, 248, 0.35)',
               borderRadius: '20px',
               padding: '6px 18px',
-              color: showAirEffects ? '#38bdf8' : '#cbd5e1',
+              color: '#38bdf8',
               fontSize: '11px',
               fontWeight: 800,
               letterSpacing: '0.08em',
@@ -458,9 +395,7 @@ export default function FlightHUD({
               textTransform: 'uppercase',
             }}
           >
-            {showAirEffects
-              ? '✈️ MOVE CURSOR TO STEER & FLY · AIRFLOW SPEED PARTICLES ACTIVE'
-              : '✈️ MOVE CURSOR TO STEER & FLY · AIR PARTICLES & CLOUDS DISABLED (CLEAR VIEW)'}
+            ✈️ MOVE CURSOR TO STEER & FLY · AIRFLOW SPEED PARTICLES ACTIVE
           </div>
         </div>
       )}
